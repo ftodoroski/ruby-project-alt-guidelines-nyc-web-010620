@@ -1,0 +1,49 @@
+You will be building a Command Line CRUD App that uses a database to persist information. The goal of which is to demonstrate all of the skills that you've learned in module one:
+Ruby
+Object Orientation
+Relationships (via ActiveRecord)
+Problem Solving (via creating a Command Line Interface (CLI))
+
+Your minimum requirements for this project are to build a Command Line App that:
+[]Contains at least three models with corresponding tables, including a join table.
+[]Accesses a Sqlite3 database using ActiveRecord.
+[]Has a CLI that allows users to interact with your database as defined by your user stories (minimum of four; one for each CRUD action).
+[]Uses good OO design patterns. You should have separate models for your runner and CLI interface.
+
+MODELS 
+Coffee Shop --< Review >-- User 
+
+MODEL RELATIONSHIPS 
+- a coffee shop has many reviews
+- a coffee shop has many users through reviews
+
+- a user has many reviews
+- a user has many coffee shops through reviews
+
+- a review belongs to coffee shop
+- a review belongs to user
+
+USER STORIES 
+ - As a user, I want to be able to write a review for a coffee shop. (Create)
+ - As a user, I want to enter a coffee shop and be given user reviews for that coffee shop. (Read)
+ - As a user, I want to be able to edit my coffee shop review. (Update)
+ - As a user, I want to be able to delete one of my coffee shop reviews. (Delete)
+ - As a user, I want to see all the coffee shops in a location. (Read)
+ - As a user, I want to see all the available locations. (Read)
+
+SCHEMA 
+
+   User     
+      @name 
+      @username
+      @password
+
+   Coffee Shop
+      @name 
+      @location 
+
+   Review
+      @user_id (foreign key)
+      @coffee_shop_id (foreign key)
+      @description
+      @rating
