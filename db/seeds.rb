@@ -1,4 +1,4 @@
-CoffeeShop.destrol_all
+CoffeeShop.destroy_all
 
 CoffeeShop.create(name: "Balancero", location: "Astoria")
 CoffeeShop.create(name: "Blue Stone", location: "Financial Distict")
