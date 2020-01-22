@@ -29,24 +29,18 @@ class CliInterface
         password = nil
 
         puts "Enter your name:"
-        name = gets.chomp        
+        name = gets.chomp 
+
         puts "Enter a username:"
-        username_input = gets.chomp
-        exists?(username_input) 
-        # call method to check if username exists 
+        username = gets.chomp
+        while User.exists?(username: username)
+            puts "Username already taken, please choose another one."
+            username = gets.chomp
+        end
+        
         puts "Enter a password:"
         password = gets.chomp
 
-        User.create(name: name, username: username_input, password: password)
+        User.create(name: name, username: username, password: password)
     end
-    
-    def exists?(username_input)
-        # validates with database if that username exists or not
-        # returns true/false
-        if User.all.select{|user| user.username == username_input} == [] 
-            return false 
-        else
-            return true  
-        end 
-    end 
 end

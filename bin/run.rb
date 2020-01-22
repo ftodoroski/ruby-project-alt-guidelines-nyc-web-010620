@@ -5,7 +5,5 @@ app1 = CliInterface.new
 
 # binding.pry
 
-puts "hello world"
-
 app1.greeting
 app1.sign_up
