@@ -1,9 +1,10 @@
 require_relative '../config/environment'
 
 app1 = CliInterface.new
-# app1.valid?('fefefe')
 
 # binding.pry
 
 app1.greeting
-app1.sign_up
+app1.prompt_to_login_or_signup
+app1.log_in
+# app1.sign_up
