@@ -3,6 +3,26 @@ class CliInterface
         puts "Welcome to Coffee Run"
     end
 
+    def prompt_to_login_or_signup
+        puts "Log in or Sign up"
+        input = gets.chomp.capitalize 
+
+        until input == "Log in" || input == "Sign up"
+            puts "Please Log in or Sign up"
+            input = gets.chomp.capitalize
+        end
+
+        input
+    end
+
+    # Inside the iteration this menu comes then does case check and does certain things
+    def menu
+        puts "- Buy Coffee"
+        puts "- View My Reviews"
+        puts "- Edit My Reviews"
+        puts "- Delete a Review"
+    end
+
     def sign_up
         name = nil
         username = nil
@@ -20,11 +40,6 @@ class CliInterface
         User.create(name: name, username: username_input, password: password)
     end
     
-    def prompt_to_login_or_signup
-        puts "Log in or Sign up"
-        gets.chomp 
-    end
-
     def exists?(username_input)
         # validates with database if that username exists or not
         # returns true/false
@@ -34,5 +49,4 @@ class CliInterface
             return true  
         end 
     end 
-
 end
