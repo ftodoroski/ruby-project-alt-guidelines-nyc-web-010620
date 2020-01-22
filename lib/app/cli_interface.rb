@@ -135,4 +135,48 @@ class CliInterface
             end
         end
     end
-end
+
+    def password_logic(user, password)
+        if password == user.password
+            puts "Welcome back, #{user.name}! Let's get you some coffee!"
+            return
+        else 
+            puts "Password does not match what we have. Please try again."
+            new_password = gets.chomp
+            password_logic(user, new_password)
+        end
+    end 
+
+    def log_in
+        user = nil 
+        puts "Welcome back. Please enter your username."
+        username = gets.chomp 
+        if User.exists?(username: username)
+            puts "Please enter your password."
+            password = gets.chomp 
+
+            user = User.find_by(username: username)
+
+            password_logic(user, password)  
+        end 
+        if !User.exists?(username: username)
+            puts "Username does not exist. Please sign up for an account."
+            sign_up 
+        end 
+        return user
+    end 
+
+    def view_my_reviews(user)
+        i = 0
+
+        my_reviews = user.reviews 
+        my_reviews.each do |review|
+            puts "#{(i += 1)}."
+            puts "Coffee Shop: #{review.coffee_shop.name}"
+            puts "Rating: #{review.rating}"
+            puts "Review: #{review.description}"
+            puts "\n"
+        end 
+    end 
+
+end 
