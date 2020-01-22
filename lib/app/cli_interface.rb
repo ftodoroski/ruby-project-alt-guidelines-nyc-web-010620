@@ -1,3 +1,5 @@
+require "pry"
+
 class CliInterface
     def greeting 
         puts "Welcome to Coffee Run"
@@ -46,8 +48,7 @@ class CliInterface
 
     def password_logic(user, password)
         if password == user.password
-            puts "Successfully logged in!"
-            #recursive function; will call itself until the base case evaluates as true
+            puts "Welcome back, #{user.name}! Let's get you some coffee!"
             return
         else 
             puts "Password does not match what we have. Please try again."
@@ -57,34 +58,35 @@ class CliInterface
     end 
 
     def log_in
+        user = nil 
         puts "Welcome back. Please enter your username."
         username = gets.chomp 
-        # check against database that that username exists
         if User.exists?(username: username)
-            # if it does exist, ask for password
             puts "Please enter your password."
             password = gets.chomp 
-            # if the password entered matches the password stored for the existing username, 
-            # sign user in 
+
             user = User.find_by(username: username)
 
-            password_logic(user, password)
-            # if password == user.password
-            #     puts "Successfully logged in!"
-            # else 
-            #     puts "Password does not match what we have. Please try again."
-
-            # end 
+            password_logic(user, password)  
         end 
-        # if username does not exist, prompt user to sign up    
         if !User.exists?(username: username)
             puts "Username does not exist. Please sign up for an account."
             sign_up 
         end 
+        return user
     end 
 
-def view_my_reviews
-    
-end 
+    def view_my_reviews(user)
+        i = 0
+
+        my_reviews = user.reviews 
+        my_reviews.each do |review|
+            puts "#{(i += 1)}."
+            puts "Coffee Shop: #{review.coffee_shop.name}"
+            puts "Rating: #{review.rating}"
+            puts "Review: #{review.description}"
+            puts "\n"
+        end 
+    end 
 
 end 

@@ -5,6 +5,7 @@ app1 = CliInterface.new
 # binding.pry
 
 app1.greeting
-app1.prompt_to_login_or_signup
-app1.log_in
-# app1.sign_up
+# user = app1.log_in
+user = app1.log_in
+puts "#{user}"
+app1.view_my_reviews(user)
