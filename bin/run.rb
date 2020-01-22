@@ -5,5 +5,4 @@ app1 = CliInterface.new
 
 # binding.pry
 
-app1.greeting
-app1.sign_up
+app1.run
