@@ -22,7 +22,7 @@ class CliInterface
         puts "- View My Reviews"
         puts "- Edit My Reviews"
         puts "- Delete a Review"
-        puts "- Log out"
+        puts "- Log Out"
     end
 
     def sign_up
@@ -49,7 +49,7 @@ class CliInterface
     def coffee_options
         puts "Cappuccino"
         puts "Macchiato"
-        puts "Expresso"
+        puts "Espresso"
         puts "Americano"
         puts "Iced Coffee"
         puts "Iced Tea "
@@ -90,16 +90,15 @@ class CliInterface
 
             system("clear")
             puts "Thank you #{user.name} for buying #{self.sanitize_word(input)} from #{loc_name_input}."
-            puts "Hey #{user.name}, would you like to make a review?(yes/no)"
+            puts "Hey #{user.name}, would you like to make a review? (Yes/No)"
             input = gets.strip.downcase
             
             if input == 'yes'
                 self.write_review(coffee_shop_obj ,loc_name_input, user)
+            elsif user_input == "no"
+                puts "No worries...enjoy your coffee!"
             end
-
         end
-
-        # name = gets.chomp
     end
 
     def run 
@@ -229,16 +228,11 @@ class CliInterface
             end
         puts "Thanks for rating #{coffee_shop}."
             
-        puts "Now let users know why you gave #{coffee_shop} that rating and what you thought about it."
+        puts "Now let users know why you gave that rating and what you thought about #{coffee_shop}."
         description_input = gets.chomp
 
         puts "Coffee Run runs on reviews to help users find the best coffee shop. Thanks for contributing to the community!"
-        new_review = Review.new(user_id: user.id, coffee_shop_id: coffee_shop_obj.id, description: description_input, rating: rating_input)
+        new_review = Review.create(user_id: user.id, coffee_shop_id: coffee_shop_obj.id, description: description_input, rating: rating_input)
     end 
-
-        # if user_input == "no"
-        #     puts "No worries...enjoy your coffee!"
-        # end 
-    
 
 end 
