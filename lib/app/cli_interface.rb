@@ -57,7 +57,7 @@ class CliInterface
 
     def buy_coffee(user)
         system("clear")
-        puts "Where area would you like to buy coffee from?"
+        puts "Which area would you like to buy coffee from?"
         locations = CoffeeShop.all.map do |shop|
             shop.location
         end
@@ -83,7 +83,7 @@ class CliInterface
 
             puts "Thank you #{user.name} for buying #{input.capitalize}"
             puts "Hey #{user.name}, would you like to make a review?(yes/no)"
-            inpute = gets.chomp
+            input = gets.chomp
             
         end
 
@@ -201,5 +201,32 @@ class CliInterface
         # then, take the sum of the ratings from that set of reviews and divide by the 
         # number of reviews to find the average 
     end 
+
+    # valid rating is between 1-5
+    def check_rating_valid(number)
+        n = (1 .. 5).to_a 
+        n.include?(number)
+    end 
+
+    def write_review
+        puts "On a scale of 1-5 (with 5 being the highest), what rating would you give #{coffee_shop.name}?"
+        rating_input = gets.chomp
+            until check_rating_valid(rating_input)
+                puts "Rating needs to be between 1-5. Please enter a valid rating."
+                rating_input = gets.chomp
+            end
+        puts "Thanks for rating #{coffee_shop.name}."
+            
+        puts "Now let users know why you gave #{coffee_shop.name} that rating and what you thought about it."
+        description_input = gets.chomp
+
+        puts "Coffee Run runs on reviews to help users find the best coffee shop. Thanks for contributing to the community!"
+        new_review = Review.new(user_id: user.id, coffee_shop_id: coffee_shop.id, description: description_input, rating: rating_input)
+    end 
+
+        # if user_input == "no"
+        #     puts "No worries...enjoy your coffee!"
+        # end 
+    
 
 end 
