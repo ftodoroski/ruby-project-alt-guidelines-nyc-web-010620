@@ -179,4 +179,27 @@ class CliInterface
         end 
     end 
 
+    # we should be able to search for a coffee shop by name 
+    # and then be able to see all reviews for that coffee shop
+    def view_coffee_shop_reviews(coffee_shop)
+        i = 0 
+
+        coffee_shop_reviews = coffee_shop.reviews 
+        coffee_shop_reviews.each do |review|
+            puts "#{(i += 1)}." 
+            puts "Reviewed by: #{review.user.name}"
+            puts "#{review.rating}"
+            puts "#{review.description}"
+            puts "\n"
+        end 
+    end 
+
+    # we should be able to see the average rating that a coffee shop has 
+    def average_rating(coffee_shop)
+        # run through all reviews and select all the reviews with the coffee_shop_id 
+        # that matches the id that belongs to the coffee shop passed in
+        # then, take the sum of the ratings from that set of reviews and divide by the 
+        # number of reviews to find the average 
+    end 
+
 end 
