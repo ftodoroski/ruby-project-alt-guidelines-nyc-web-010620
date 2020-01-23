@@ -135,4 +135,71 @@ class CliInterface
             end
         end
     end
-end
+
+    def password_logic(user, password)
+        if password == user.password
+            puts "Welcome back, #{user.name}! Let's get you some coffee!"
+            return
+        else 
+            puts "Password does not match what we have. Please try again."
+            new_password = gets.chomp
+            password_logic(user, new_password)
+        end
+    end 
+
+    def log_in
+        user = nil 
+        puts "Welcome back. Please enter your username."
+        username = gets.chomp 
+        if User.exists?(username: username)
+            puts "Please enter your password."
+            password = gets.chomp 
+
+            user = User.find_by(username: username)
+
+            password_logic(user, password)  
+        end 
+        if !User.exists?(username: username)
+            puts "Username does not exist. Please sign up for an account."
+            sign_up 
+        end 
+        return user
+    end 
+
+    def view_my_reviews(user)
+        i = 0
+
+        my_reviews = user.reviews 
+        my_reviews.each do |review|
+            puts "#{(i += 1)}."
+            puts "Coffee Shop: #{review.coffee_shop.name}"
+            puts "Rating: #{review.rating}"
+            puts "Review: #{review.description}"
+            puts "\n"
+        end 
+    end 
+
+    # we should be able to search for a coffee shop by name 
+    # and then be able to see all reviews for that coffee shop
+    def view_coffee_shop_reviews(coffee_shop)
+        i = 0 
+
+        coffee_shop_reviews = coffee_shop.reviews 
+        coffee_shop_reviews.each do |review|
+            puts "#{(i += 1)}." 
+            puts "Reviewed by: #{review.user.name}"
+            puts "#{review.rating}"
+            puts "#{review.description}"
+            puts "\n"
+        end 
+    end 
+
+    # we should be able to see the average rating that a coffee shop has 
+    def average_rating(coffee_shop)
+        # run through all reviews and select all the reviews with the coffee_shop_id 
+        # that matches the id that belongs to the coffee shop passed in
+        # then, take the sum of the ratings from that set of reviews and divide by the 
+        # number of reviews to find the average 
+    end 
+
+end 
