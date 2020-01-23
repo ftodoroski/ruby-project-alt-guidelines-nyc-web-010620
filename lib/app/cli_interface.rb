@@ -80,21 +80,22 @@ class CliInterface
                 puts location.name
             end
             # binding.pry
-            location_input = sanitize_word(gets.chomp)
-
+            loc_name_input = sanitize_word(gets.chomp)
+            coffee_shop_obj = CoffeeShop.all.find_by(name: loc_name_input)
+            # binding.pry
             system("clear")
             puts "What type of coffee would you like to buy?"
             self.coffee_options
             input = gets.strip
 
             system("clear")
-            puts "Thank you #{user.name} for buying #{self.sanitize_word(input)} from #{location_input}."
+            puts "Thank you #{user.name} for buying #{self.sanitize_word(input)} from #{loc_name_input}."
             puts "Hey #{user.name}, would you like to make a review?(yes/no)"
             input = gets.strip.downcase
             
-            # if input == 'yes'
-
-            # end
+            if input == 'yes'
+                self.write_review(coffee_shop_obj ,loc_name_input, user)
+            end
 
         end
 
@@ -215,24 +216,24 @@ class CliInterface
 
     # valid rating is between 1-5
     def check_rating_valid(number)
-        n = (1 .. 5).to_a 
+        n = (1..5).to_a 
         n.include?(number)
     end 
 
-    def write_review
-        puts "On a scale of 1-5 (with 5 being the highest), what rating would you give #{coffee_shop.name}?"
-        rating_input = gets.chomp
+    def write_review(coffee_shop_obj, coffee_shop, user)
+        puts "On a scale of 1-5 (with 5 being the highest), what rating would you give #{coffee_shop}?"
+        rating_input = gets.chomp.to_i
             until check_rating_valid(rating_input)
                 puts "Rating needs to be between 1-5. Please enter a valid rating."
-                rating_input = gets.chomp
+                rating_input = gets.chomp.to_i
             end
-        puts "Thanks for rating #{coffee_shop.name}."
+        puts "Thanks for rating #{coffee_shop}."
             
-        puts "Now let users know why you gave #{coffee_shop.name} that rating and what you thought about it."
+        puts "Now let users know why you gave #{coffee_shop} that rating and what you thought about it."
         description_input = gets.chomp
 
         puts "Coffee Run runs on reviews to help users find the best coffee shop. Thanks for contributing to the community!"
-        new_review = Review.new(user_id: user.id, coffee_shop_id: coffee_shop.id, description: description_input, rating: rating_input)
+        new_review = Review.new(user_id: user.id, coffee_shop_id: coffee_shop_obj.id, description: description_input, rating: rating_input)
     end 
 
         # if user_input == "no"
@@ -241,9 +242,3 @@ class CliInterface
     
 
 end 
-
-def sanitize_word(word)
-    split_word = word.split(" ")
-    cap = split_word.map { |word| word.capitalize }
-    cap.join(" ")
-end
