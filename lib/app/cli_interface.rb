@@ -55,16 +55,22 @@ class CliInterface
         puts "Iced Tea "
     end
 
+    def sanitize_word(word)
+        split_word = word.split(" ")
+        cap = split_word.map { |word| word.capitalize }
+        cap.join(" ")
+    end 
+
     def buy_coffee(user)
         system("clear")
-        puts "Which area would you like to buy coffee from?"
+        puts "What area would you like to buy coffee from?"
         locations = CoffeeShop.all.map do |shop|
             shop.location
         end
 
 
         locations.uniq!.each { |location| puts location }
-        user_input = gets.chomp
+        user_input = sanitize_word(gets.chomp)
 
         if locations.include?(user_input)
             system("clear")
@@ -73,18 +79,23 @@ class CliInterface
             neighborhood_locations.each do |location|
                 puts location.name
             end
-
-            input = gets.chomp
+            # binding.pry
+            location_input = sanitize_word(gets.chomp)
 
             system("clear")
             puts "What type of coffee would you like to buy?"
             self.coffee_options
-            input = gets.chomp
+            input = gets.strip
 
-            puts "Thank you #{user.name} for buying #{input.capitalize}"
+            system("clear")
+            puts "Thank you #{user.name} for buying #{self.sanitize_word(input)} from #{location_input}."
             puts "Hey #{user.name}, would you like to make a review?(yes/no)"
-            input = gets.chomp
+            input = gets.strip.downcase
             
+            # if input == 'yes'
+
+            # end
+
         end
 
         # name = gets.chomp
@@ -230,3 +241,9 @@ class CliInterface
     
 
 end 
+
+def sanitize_word(word)
+    split_word = word.split(" ")
+    cap = split_word.map { |word| word.capitalize }
+    cap.join(" ")
+end
