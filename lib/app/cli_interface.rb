@@ -101,7 +101,7 @@ class CliInterface
         when "Log in"
             # self.log_in
             iteration = true
-            user = self.log_in
+            # user = self.log_in
         when "Sign up"  
             # self.sign_up
             user = self.sign_up
