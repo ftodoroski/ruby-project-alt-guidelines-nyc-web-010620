@@ -187,7 +187,7 @@ class CliInterface
         description_input = gets.chomp
 
         puts "Coffee Run runs on reviews to help users find the best coffee shop. Thanks for contributing to the community!"
-        new_review = Review.new(user_id: user.id, coffee_shop_id: coffee_shop_obj.id, description: description_input, rating: rating_input)
+        new_review = Review.create(user_id: user.id, coffee_shop_id: coffee_shop_obj.id, description: description_input, rating: rating_input)
     end 
 
      def run 
@@ -209,7 +209,7 @@ class CliInterface
         while iteration
             iteration = false
 
-            system("clear")
+            # system("clear")
             puts "What would you like to do?"
             self.menu
             user_input = gets.chomp.downcase
@@ -220,7 +220,7 @@ class CliInterface
                 self.buy_coffee(user)
             when "view my reviews"
                 iteration = true
-
+                self.view_my_reviews(user)
             when "edit my reviews"
                 iteration = true
 
