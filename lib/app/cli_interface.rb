@@ -209,7 +209,7 @@ class CliInterface
     end 
 
     def write_review
-        puts "On a scale of 1-5 (with 5 being the highest), what rating would you give #{coffee_shop.name}?"
+        puts "On a scale of 1-5 (with 5 being the highest), what rating would you give #{review.coffee_shop.name}?"
         rating_input = gets.chomp
             until check_rating_valid(rating_input)
                 puts "Rating needs to be between 1-5. Please enter a valid rating."
