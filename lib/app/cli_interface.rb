@@ -22,7 +22,7 @@ class CliInterface
         puts "- View My Reviews"
         puts "- Edit My Reviews"
         puts "- Delete a Review"
-        puts "- Log out"
+        puts "- Log Out"
     end
 
     def sign_up
@@ -100,52 +100,6 @@ class CliInterface
         end
 
         # name = gets.chomp
-    end
-
-    def run 
-        user = nil
-
-        system("clear")
-        self.greeting 
-
-        iteration = nil
-        case self.prompt_to_login_or_signup 
-        when "Log in"
-            # self.log_in
-            iteration = true
-            user = self.log_in
-        when "Sign up"  
-            # self.sign_up
-            user = self.sign_up
-            iteration = true
-        end
-
-        while iteration
-            iteration = false
-
-            system("clear")
-            puts "What would you like to do?"
-            self.menu
-            user_input = gets.chomp.downcase
-
-            case user_input
-            when "buy coffee"
-                iteration = true
-                self.buy_coffee(user)
-            when "view my reviews"
-                iteration = true
-
-            when "edit my reviews"
-                iteration = true
-
-            when "delete a review"
-                iteration = true
-
-            when "log out"
-                iteration = false
-                system("clear")
-            end
-        end
     end
 
     def password_logic(user, password)
@@ -236,9 +190,48 @@ class CliInterface
         new_review = Review.new(user_id: user.id, coffee_shop_id: coffee_shop_obj.id, description: description_input, rating: rating_input)
     end 
 
-        # if user_input == "no"
-        #     puts "No worries...enjoy your coffee!"
-        # end 
-    
+     def run 
+        user = nil
 
+        system("clear")
+        self.greeting 
+
+        iteration = nil
+        case self.prompt_to_login_or_signup 
+        when "Log in"
+            iteration = true
+            user = self.log_in
+        when "Sign up"  
+            user = self.sign_up
+            iteration = true
+        end
+
+        while iteration
+            iteration = false
+
+            system("clear")
+            puts "What would you like to do?"
+            self.menu
+            user_input = gets.chomp.downcase
+
+            case user_input
+            when "buy coffee"
+                iteration = true
+                self.buy_coffee(user)
+            when "view my reviews"
+                iteration = true
+
+            when "edit my reviews"
+                iteration = true
+
+            when "delete a review"
+                iteration = true
+
+            when "log out"
+                iteration = false
+                system("clear")
+            end
+        end
+    end
 end 
+
