@@ -129,7 +129,8 @@ class CliInterface
             puts "Username does not exist. Please sign up for an account."
             sign_up 
         end 
-        return user
+        # binding.pry
+        user
     end 
 
     def view_my_reviews(user)
@@ -190,6 +191,33 @@ class CliInterface
         new_review = Review.create(user_id: user.id, coffee_shop_id: coffee_shop_obj.id, description: description_input, rating: rating_input)
     end 
 
+    def check_range_and_number(range, user_input)
+        (0..range).to_a.include?(user_input)
+    end
+
+    def edit_my_reviews(user)
+        user_reviews = Review.all.select { |review| review.user_id == user.id }
+
+
+        puts "Which review would you like to update"
+        user_reviews.each_with_index do |review, index|
+            puts "\n"
+            puts "#{index += 1}."
+            puts "Coffee Shop: #{review.coffee_shop.name}"
+            puts "Your Rating: #{review.rating}"
+            puts "Description: #{review.description}"
+        end
+
+        user_input = gets.chomp
+        review = user_reviews[user_input].id 
+
+        puts "New rating of #{review.coffee_shop.name}"
+        new_rating = gets.chomp.to_i
+
+        puts "New "
+        new_description = gets.chomp
+    end
+
      def run 
         user = nil
 
@@ -223,7 +251,7 @@ class CliInterface
                 self.view_my_reviews(user)
             when "edit my reviews"
                 iteration = true
-
+                self.edit_my_reviews(user)
             when "delete a review"
                 iteration = true
 
@@ -235,3 +263,30 @@ class CliInterface
     end
 end 
 
+
+# Testing Area
+# def check_range_and_number(range, user_input)
+#     (0..range).to_a.include?(user_input)
+# end
+
+# def edit_my_reviews(user)
+#     user_reviews = Review.all.select { |review| review.user_id == user.id }
+
+#     iteration = true
+    
+#     while iteration
+#         iteration = false
+
+#         puts "Which review would you like to update"
+#         user_reviews.each_with_index do |review, index|
+#             puts "\n"
+#             puts "#{index += 1}."
+#             puts "Coffee Shop: #{review.coffee_shop.name}"
+#             puts "Your Rating: #{review.rating}"
+#             puts "Description: #{review.description}"
+#             # puts "\n"
+#         end
+
+#         user_input = gets.chomp
+#     end
+# end
