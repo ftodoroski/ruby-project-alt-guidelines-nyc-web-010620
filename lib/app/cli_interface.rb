@@ -125,7 +125,7 @@ class CliInterface
         elsif @@counter == 3
             puts "Password is incorrect."
             prompt_to_login_or_signup
-        else # counts to three every time they get the password wrong
+        else 
             @@counter += 1
             # 3.times do
                 puts "Password does not match what we have. Please try again."
