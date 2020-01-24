@@ -51,19 +51,14 @@ class CliInterface
         username = nil
         password = nil
 
-        puts "Enter your name:"
-        name = gets.chomp 
-
-        puts "Enter a username:"
-        username = gets.chomp
+        name = $prompt.ask("Enter your name:")
+        username = $prompt.ask("Enter a username:")
+        
         while User.exists?(username: username)
-            puts "Username already taken, please choose another one."
-            username = gets.chomp
+            username = $prompt.ask("Username already taken, please choose another one.")
         end
         
-        puts "Enter a password:"
-        password = gets.chomp
-
+        password = $prompt.mask("Enter a password:")
         @user = User.create(name: name, username: username, password: password)
     end
 
@@ -110,8 +105,9 @@ class CliInterface
 
             system("clear")
             puts "Thank you #{@user.name} for buying #{self.sanitize_word(input)} from #{loc_name_input}."
-            puts "Hey #{@user.name}, would you like to make a review? (Yes/No)"
-            input = gets.strip.downcase
+            # puts "Hey #{@user.name}, would you like to make a review? (Yes/No)"
+            input = $prompt.ask("Hey #{@user.name}, would you like to make a review? (Yes/No)").downcase
+            # gets.strip.downcase
             
             if input == 'yes'
                 self.write_review(coffee_shop_obj ,loc_name_input)
@@ -130,8 +126,9 @@ class CliInterface
                 return
             else
                 count += 1
-                puts "Password does not match what we have. Please try again."
-                user_input_pass = gets.chomp
+                # puts "Password does not match what we have. Please try again."
+                user_input_pass = $prompt.mask("Password does not match what we have. Please try again.")
+                # gets.chomp
             end
         end
 
@@ -156,8 +153,9 @@ class CliInterface
 
         if !User.exists?(username: username)
             3.times do
-                puts "We cannot find an account with the username you entered. Please re-enter username."
-                username = gets.chomp 
+                # puts "We cannot find an account with the username you entered. Please re-enter username."
+                username = $prompt.ask("We cannot find an account with the username you entered. Please re-enter username.")
+                # gets.chomp 
             end 
             puts "Username does not exist. Please sign up for an account."
             sign_up 
@@ -213,16 +211,20 @@ class CliInterface
     end 
 
     def write_review(coffee_shop_obj, coffee_shop)
-        puts "On a scale of 1-5 (with 5 being the highest), what rating would you give #{coffee_shop}?"
-        rating_input = gets.chomp.to_i
+        # puts "On a scale of 1-5 (with 5 being the highest), what rating would you give #{coffee_shop}?"
+        # rating_input = gets.chomp.to_i
+        rating_input = $prompt.ask("On a scale of 1-5 (with 5 being the highest), what rating would you give #{coffee_shop}?").to_i
+        # binding.pry
             until check_rating_valid(rating_input)
-                puts "Rating needs to be between 1-5. Please enter a valid rating."
-                rating_input = gets.chomp.to_i
+                # puts "Rating needs to be between 1-5. Please enter a valid rating."
+                rating_input = $prompt.ask("Rating needs to be between 1-5. Please enter a valid rating.").to_i
+                # gets.chomp.to_i
             end
         puts "Thanks for rating #{coffee_shop}."
             
-        puts "Now let users know why you gave that rating and what you thought about #{coffee_shop}."
-        description_input = gets.chomp
+        # puts "Now let users know why you gave that rating and what you thought about #{coffee_shop}."
+        description_input = $prompt.ask("Now let users know why you gave that rating and what you thought about #{coffee_shop}.")
+        # gets.chomp
 
         puts "Coffee Run runs on reviews to help users find the best coffee shop. Thanks for contributing to the community!"
         new_review = Review.create(user_id: @user.id, coffee_shop_id: coffee_shop_obj.id, description: description_input, rating: rating_input)
@@ -247,8 +249,10 @@ class CliInterface
                 puts " --------------- "
                 puts "\n"
             end
-            puts "Select a review to delete"
-            user_input = gets.chomp.to_i - 1
+            # puts "Select a review to delete"
+            user_input = $prompt.ask("Select a review to delete").to_i - 1
+            # binding.pry
+            # gets.chomp.to_i - 1
             review = user_reviews[user_input]
             # binding.pry
 
@@ -260,8 +264,9 @@ class CliInterface
             @user = User.find(@user.id)
 
             puts "Your review for #{review.coffee_shop.name} has been deleted."
-            puts "Would you like to delete another review you made?(yes/no)"
-            update_another = gets.chomp.downcase
+            # puts "Would you like to delete another review you made?(yes/no)"
+            update_another = $prompt.ask("Would you like to delete another review you made?(yes/no)").downcase
+            # gets.chomp.downcase
 
             if update_another == "yes"
                 iteration = true
@@ -293,8 +298,9 @@ class CliInterface
             end
             
             puts "\n"
-            puts "Select a review to updated"
-            user_input = gets.chomp.to_i - 1
+            # puts "Select a review to updated"
+            user_input = $prompt.ask("Select a review to updated").to_i - 1
+            # gets.chomp.to_i - 1
             review = user_reviews[user_input]
 
             system("clear")
@@ -303,14 +309,17 @@ class CliInterface
             puts "Description: #{review.description}"
             puts "\n"
 
-            puts "New rating of #{review.coffee_shop.name}."
-            new_rating = gets.chomp.to_i
+            # puts "New rating of #{review.coffee_shop.name}."
+            new_rating = $prompt.ask("New rating of #{review.coffee_shop.name}.").to_i
+            # gets.chomp.to_i
 
-            puts "Update your description for #{review.coffee_shop.name}."
-            new_description = gets.chomp
+            # puts "Update your description for #{review.coffee_shop.name}."
+            new_description = $prompt.ask("Update your description for #{review.coffee_shop.name}.")
+            # gets.chomp
 
-            puts "Would you like to update another review you made?(yes/no)"
-            update_another = gets.chomp.downcase
+            # puts "Would you like to update another review you made?(yes/no)"
+            update_another = $prompt.ask("Would you like to update another review you made?(yes/no)").downcase
+            # gets.chomp.downcase
 
             if update_another == "yes"
                 iteration = true
@@ -324,8 +333,9 @@ class CliInterface
     end
 
     def update_password
-        puts "Please enter a new password"
-        new_password = gets.chomp.to_s
+        # puts "Please enter a new password"
+        new_password = $prompt.ask("Please enter a new password").to_s
+        # gets.chomp.to_s
         @user.update(password: new_password)
         @user = User.find(@user.id)
         puts "Password successfully changed!"
@@ -352,6 +362,8 @@ class CliInterface
             puts "What would you like to do?"
             self.menu
             user_input = gets.chomp.downcase
+            # $prompt.ask("What would you like to do?").downcase
+            # gets.chomp.downcase
 
             case user_input
             when "buy coffee"
