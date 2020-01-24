@@ -52,7 +52,7 @@ class CliInterface
         puts "Espresso"
         puts "Americano"
         puts "Iced Coffee"
-        puts "Iced Tea "
+        puts "Iced Tea"
     end
 
     def sanitize_word(word)
@@ -136,12 +136,15 @@ class CliInterface
 
         my_reviews = user.reviews 
         my_reviews.each do |review|
+            puts " --------------- "
             puts "#{(i += 1)}."
             puts "Coffee Shop: #{review.coffee_shop.name}"
             puts "Rating: #{review.rating}"
             puts "Review: #{review.description}"
+            puts " --------------- "
             puts "\n"
         end 
+        my_reviews
     end 
 
     # we should be able to search for a coffee shop by name 
@@ -151,10 +154,12 @@ class CliInterface
 
         coffee_shop_reviews = coffee_shop.reviews 
         coffee_shop_reviews.each do |review|
+            puts " --------------- "
             puts "#{(i += 1)}." 
             puts "Reviewed by: #{review.user.name}"
             puts "#{review.rating}"
             puts "#{review.description}"
+            puts " --------------- "
             puts "\n"
         end 
     end 
@@ -187,6 +192,19 @@ class CliInterface
 
         puts "Coffee Run runs on reviews to help users find the best coffee shop. Thanks for contributing to the community!"
         new_review = Review.create(user_id: user.id, coffee_shop_id: coffee_shop_obj.id, description: description_input, rating: rating_input)
+    end 
+
+    # a user can only delete reviews belonging to themselves
+    def delete_review(user)
+        puts "Choose which one of your reviews you want to delete."
+        user_reviews = view_my_reviews(user)
+        
+        selected_review = gets.chomp
+        record_id = user_reviews[(selected_review).to_i - 1].id
+
+        Review.find_by(id: record_id).destroy
+        
+        # puts "Your review for #{coffee_shop.name} has been deleted."
     end 
 
      def run 
@@ -225,12 +243,13 @@ class CliInterface
 
             when "delete a review"
                 iteration = true
-
+                self.delete_review(user)
             when "log out"
                 iteration = false
                 system("clear")
             end
         end
     end
+
 end 
 
