@@ -139,16 +139,10 @@ class CliInterface
     end 
 
     def log_in
-<<<<<<< HEAD
-        puts "Welcome back. Please enter your username."
-        username = gets.chomp 
-
-=======
         # puts "Welcome back. Please enter your username."
         # username = gets.chomp 
             username = $prompt.ask("Welcome back. Please enter your username.")
             # binding.pry
->>>>>>> Filip
         if User.exists?(username: username)
             @user = User.find_by(username: username)
             # puts "Please enter your password."
@@ -381,7 +375,3 @@ class CliInterface
 end
 
 
-# Testing
-def mask_password(password, mask="*")
-
-end
