@@ -72,7 +72,6 @@ class CliInterface
             shop.location
         end
 
-
         locations.uniq!.each { |location| puts location }
         user_input = sanitize_word(gets.chomp)
 
@@ -211,8 +210,6 @@ class CliInterface
         # puts "Your review for #{coffee_shop.name} has been deleted."
     end 
 
-     def run 
-        user = nil
     def check_range_and_number(range, user_input)
         (0..range).to_a.include?(user_input)
     end
@@ -304,8 +301,7 @@ class CliInterface
             when "log out"
                 iteration = false
                 system("clear")
-            end
+            end 
         end
     end
-
-end 
+end
