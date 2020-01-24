@@ -36,12 +36,14 @@ class CliInterface
     end
 
     def menu
-        puts "- Buy Coffee"
-        puts "- View My Reviews"
-        puts "- Edit My Reviews"
-        puts "- Delete a Review"
-        puts "- Update Password"
-        puts "- Log Out"
+        $prompt.select ("Please select any of the below") do |menu|
+        menu.choice "Buy Coffee", -> {buy_coffee}
+        menu.choice "View My Reviews", -> {view_my_reviews}
+        menu.choice "Edit My Reviews", -> {edit_my_reviews}
+        menu.choice "Delete a Review", -> {delete_review}
+        menu.choice "Update Password", -> {update_password}
+        menu.choice "Log Out", -> {greeting}
+        end
     end
 
     def sign_up
