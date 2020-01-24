@@ -37,6 +37,7 @@ class CliInterface
         puts "- View My Reviews"
         puts "- Edit My Reviews"
         puts "- Delete a Review"
+        puts "- Update Password"
         puts "- Log Out"
     end
 
@@ -303,6 +304,14 @@ class CliInterface
         end
     end
 
+    def update_password
+        puts "Please enter a new password"
+        new_password = gets.chomp.to_s
+        @user.update(password: new_password)
+        @user = User.find(@user.id)
+        puts "Password successfully changed!"
+    end 
+
      def run 
         system("clear")
         self.greeting 
@@ -338,6 +347,9 @@ class CliInterface
             when "delete a review"
                 iteration = true
                 self.delete_review
+            when "update password"
+                iteration = true
+                self.update_password
             when "log out"
                 iteration = false
                 system("clear")
