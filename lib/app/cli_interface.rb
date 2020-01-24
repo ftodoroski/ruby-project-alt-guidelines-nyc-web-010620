@@ -119,23 +119,61 @@ class CliInterface
         end
     end
 
-@@counter = 0
-    def password_logic(password)
-        if password == @user.password
-            puts "Welcome back, #{@user.name}! Let's get you some coffee!"
-            return
+# @@counter = 0
+    # def password_logic(password)
+    #     @@counter = 0
+    #     if password == @user.password
+    #         puts "Welcome back, #{@user.name}! Let's get you some coffee!"
+    #         return
 
-        elsif @@counter == 3
-            puts "Password is incorrect."
-            prompt_to_login_or_signup
-        else 
-            @@counter += 1
-            # 3.times do
+    #     elsif @@counter == 3
+    #         puts "Password is incorrect."
+    #         prompt_to_login_or_signup
+    #     else 
+    #         @@counter += 1
+    #         # 3.times do
+    #             puts "Password does not match what we have. Please try again."
+    #             new_password = gets.chomp
+    #             password_logic(new_password)
+    #         #end 
+    #     end    
+    # end 
+
+    def password_logic(password)
+        user_input_pass = password
+        count = 0
+        while count < 3
+            if user_input_pass == @user.password
+                puts "Welcome back, #{@user.name}! Let's get you some coffee!"
+                return
+            else
+                count += 1
                 puts "Password does not match what we have. Please try again."
-                new_password = gets.chomp
-                password_logic(new_password)
-            #end 
-        end    
+                user_input_pass = gets.chomp
+            end
+        end
+
+        system("clear")
+        puts "Password is incorrect."
+        puts "Please sign up for an account!"
+        self.sign_up
+
+        # @@counter = 0
+        # if password == @user.password
+        #     puts "Welcome back, #{@user.name}! Let's get you some coffee!"
+        #     return
+
+        # elsif @@counter == 3
+        #     puts "Password is incorrect."
+        #     prompt_to_login_or_signup
+        # else 
+        #     @@counter += 1
+        #     # 3.times do
+        #         puts "Password does not match what we have. Please try again."
+        #         new_password = gets.chomp
+        #         password_logic(new_password)
+        #     #end 
+        # end    
     end 
 
     def log_in
