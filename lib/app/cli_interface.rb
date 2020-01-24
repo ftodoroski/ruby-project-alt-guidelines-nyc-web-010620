@@ -287,30 +287,3 @@ class CliInterface
     end
 end 
 
-
-# Testing Area
-# def check_range_and_number(range, user_input)
-#     (0..range).to_a.include?(user_input)
-# end
-
-# def edit_my_reviews(user)
-#     user_reviews = Review.all.select { |review| review.user_id == user.id }
-
-#     iteration = true
-    
-#     while iteration
-#         iteration = false
-
-#         puts "Which review would you like to update"
-#         user_reviews.each_with_index do |review, index|
-#             puts "\n"
-#             puts "#{index += 1}."
-#             puts "Coffee Shop: #{review.coffee_shop.name}"
-#             puts "Your Rating: #{review.rating}"
-#             puts "Description: #{review.description}"
-#             # puts "\n"
-#         end
-
-#         user_input = gets.chomp
-#     end
-# end
