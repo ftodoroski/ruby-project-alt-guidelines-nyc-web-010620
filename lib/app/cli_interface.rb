@@ -1,6 +1,10 @@
 require "pry"
 
 class CliInterface
+    def initialize(user=nil)
+        @user = user
+    end
+
     def greeting 
         puts "Welcome to Coffee Run"
     end
@@ -43,7 +47,7 @@ class CliInterface
         puts "Enter a password:"
         password = gets.chomp
 
-        User.create(name: name, username: username, password: password)
+        @user = User.create(name: name, username: username, password: password)
     end
 
     def coffee_options
@@ -61,7 +65,7 @@ class CliInterface
         cap.join(" ")
     end 
 
-    def buy_coffee(user)
+    def buy_coffee
         system("clear")
         puts "What area would you like to buy coffee from?"
         locations = CoffeeShop.all.map do |shop|
@@ -79,10 +83,10 @@ class CliInterface
             neighborhood_locations.each do |location|
                 puts location.name
             end
-            # binding.pry
+            
             loc_name_input = sanitize_word(gets.chomp)
             coffee_shop_obj = CoffeeShop.all.find_by(name: loc_name_input)
-            # binding.pry
+            
             system("clear")
             puts "What type of coffee would you like to buy?"
             self.coffee_options
@@ -101,40 +105,39 @@ class CliInterface
         end
     end
 
-    def password_logic(user, password)
-        if password == user.password
-            puts "Welcome back, #{user.name}! Let's get you some coffee!"
+    def password_logic(password)
+        if password == @user.password
+            puts "Welcome back, #{@user.name}! Let's get you some coffee!"
             return
         else 
             puts "Password does not match what we have. Please try again."
             new_password = gets.chomp
-            password_logic(user, new_password)
+            password_logic(new_password)
         end
     end 
 
     def log_in
-        user = nil 
         puts "Welcome back. Please enter your username."
         username = gets.chomp 
         if User.exists?(username: username)
+            @user = User.find_by(username: username)
             puts "Please enter your password."
             password = gets.chomp 
 
-            user = User.find_by(username: username)
-
-            password_logic(user, password)  
+            password_logic(password)  
         end 
         if !User.exists?(username: username)
             puts "Username does not exist. Please sign up for an account."
             sign_up 
         end 
-        return user
+        
+        @user
     end 
 
-    def view_my_reviews(user)
+    def view_my_reviews
         i = 0
 
-        my_reviews = user.reviews 
+        my_reviews = @user.reviews 
         my_reviews.each do |review|
             puts " --------------- "
             puts "#{(i += 1)}."
@@ -178,7 +181,7 @@ class CliInterface
         n.include?(number)
     end 
 
-    def write_review(coffee_shop_obj, coffee_shop, user)
+    def write_review(coffee_shop_obj, coffee_shop)
         puts "On a scale of 1-5 (with 5 being the highest), what rating would you give #{coffee_shop}?"
         rating_input = gets.chomp.to_i
             until check_rating_valid(rating_input)
@@ -191,7 +194,8 @@ class CliInterface
         description_input = gets.chomp
 
         puts "Coffee Run runs on reviews to help users find the best coffee shop. Thanks for contributing to the community!"
-        new_review = Review.create(user_id: user.id, coffee_shop_id: coffee_shop_obj.id, description: description_input, rating: rating_input)
+        new_review = Review.create(user_id: @user.id, coffee_shop_id: coffee_shop_obj.id, description: description_input, rating: rating_input)
+        @user = User.find(@user.id)
     end 
 
     # a user can only delete reviews belonging to themselves
@@ -209,7 +213,60 @@ class CliInterface
 
      def run 
         user = nil
+    def check_range_and_number(range, user_input)
+        (0..range).to_a.include?(user_input)
+    end
 
+    def edit_my_reviews
+        user_reviews = Review.all.select { |review| review.user_id == @user.id }
+
+        iteration = true
+        while iteration
+            iteration = false
+
+            system("clear")
+            puts "Which review would you like to update"
+            user_reviews.each_with_index do |review, index|
+                puts "\n"
+                puts "#{index += 1}."
+                puts "Coffee Shop: #{review.coffee_shop.name}"
+                puts "Your Rating: #{review.rating}"
+                puts "Description: #{review.description}"
+            end
+            
+            puts "\n"
+            puts "Select a review to updated"
+            user_input = gets.chomp.to_i - 1
+            review = user_reviews[user_input]
+
+            system("clear")
+            puts "Coffee Shop: #{review.coffee_shop.name}"
+            puts "Your Rating: #{review.rating}"
+            puts "Description: #{review.description}"
+            puts "\n"
+
+            puts "New rating of #{review.coffee_shop.name}."
+            new_rating = gets.chomp.to_i
+
+            puts "Update your description for #{review.coffee_shop.name}."
+            new_description = gets.chomp
+
+            puts "Would you like to update another review you made?(yes/no)"
+            update_another = gets.chomp.downcase
+
+            if update_another == "yes"
+                iteration = true
+            elsif update_another == "no"
+                iteration = false
+            end
+            
+            review.update(rating: new_rating, description: new_description)
+            @user = User.find(@user.id)
+            
+        end
+    end
+
+     def run 
         system("clear")
         self.greeting 
 
@@ -217,9 +274,9 @@ class CliInterface
         case self.prompt_to_login_or_signup 
         when "Log in"
             iteration = true
-            user = self.log_in
+            self.log_in
         when "Sign up"  
-            user = self.sign_up
+            self.sign_up
             iteration = true
         end
 
@@ -234,13 +291,13 @@ class CliInterface
             case user_input
             when "buy coffee"
                 iteration = true
-                self.buy_coffee(user)
+                self.buy_coffee
             when "view my reviews"
                 iteration = true
-                self.view_my_reviews(user)
+                self.view_my_reviews
             when "edit my reviews"
                 iteration = true
-
+                self.edit_my_reviews
             when "delete a review"
                 iteration = true
                 self.delete_review(user)
@@ -252,4 +309,3 @@ class CliInterface
     end
 
 end 
-
