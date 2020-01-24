@@ -1,4 +1,7 @@
 require "pry"
+require 'tty-prompt'
+
+$prompt = TTY::Prompt.new
 
 class CliInterface
     def initialize(user=nil)
@@ -136,13 +139,20 @@ class CliInterface
     end 
 
     def log_in
+<<<<<<< HEAD
         puts "Welcome back. Please enter your username."
         username = gets.chomp 
 
+=======
+        # puts "Welcome back. Please enter your username."
+        # username = gets.chomp 
+            username = $prompt.ask("Welcome back. Please enter your username.")
+            # binding.pry
+>>>>>>> Filip
         if User.exists?(username: username)
             @user = User.find_by(username: username)
-            puts "Please enter your password."
-            password = gets.chomp 
+            # puts "Please enter your password."
+            password = $prompt.mask("Please enter your password.")
 
             password_logic(password) 
         end 
@@ -312,8 +322,7 @@ class CliInterface
             end
             
             review.update(rating: new_rating, description: new_description)
-            @user = User.find(@user.id)
-            
+            @user = User.find(@user.id) 
         end
     end
 
@@ -369,4 +378,10 @@ class CliInterface
             end 
         end
     end
+end
+
+
+# Testing
+def mask_password(password, mask="*")
+
 end
