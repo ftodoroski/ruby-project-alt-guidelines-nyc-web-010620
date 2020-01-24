@@ -116,32 +116,45 @@ class CliInterface
         end
     end
 
+@@counter = 0
     def password_logic(password)
         if password == @user.password
             puts "Welcome back, #{@user.name}! Let's get you some coffee!"
             return
-        else 
-            puts "Password does not match what we have. Please try again."
-            new_password = gets.chomp
-            password_logic(new_password)
-        end
+
+        elsif @@counter == 3
+            puts "Password is incorrect."
+            prompt_to_login_or_signup
+        else # counts to three every time they get the password wrong
+            @@counter += 1
+            # 3.times do
+                puts "Password does not match what we have. Please try again."
+                new_password = gets.chomp
+                password_logic(new_password)
+            #end 
+        end    
     end 
 
     def log_in
         puts "Welcome back. Please enter your username."
         username = gets.chomp 
+
         if User.exists?(username: username)
             @user = User.find_by(username: username)
             puts "Please enter your password."
             password = gets.chomp 
 
-            password_logic(password)  
+            password_logic(password) 
         end 
+
         if !User.exists?(username: username)
+            3.times do
+                puts "We cannot find an account with the username you entered. Please re-enter username."
+                username = gets.chomp 
+            end 
             puts "Username does not exist. Please sign up for an account."
             sign_up 
-        end 
-        
+        end    
         @user
     end 
 
