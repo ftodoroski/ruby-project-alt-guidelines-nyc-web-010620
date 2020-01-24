@@ -199,20 +199,47 @@ class CliInterface
     end 
 
     # a user can only delete reviews belonging to themselves
-    def delete_review(user)
-        puts "Choose which one of your reviews you want to delete."
-        user_reviews = view_my_reviews(user)
+    def delete_review
+        user_reviews = Review.all.select { |review| review.user_id == @user.id }
+        iteration = true
         
-        selected_review = gets.chomp
-        record_id = user_reviews[(selected_review).to_i - 1].id
+        while iteration 
+            iteration = false
 
-        Review.find_by(id: record_id).destroy
-        
-        # puts "Your review for #{coffee_shop.name} has been deleted."
+            puts "Choose which one of your reviews you want to delete."
+            user_reviews.each_with_index do |review, index|
+                puts " --------------- "
+                puts "#{(index += 1)}."
+                puts "Coffee Shop: #{review.coffee_shop.name}"
+                puts "Rating: #{review.rating}"
+                puts "Review: #{review.description}"
+                puts " --------------- "
+                puts "\n"
+            end
+            puts "Select a review to delete"
+            user_input = gets.chomp.to_i - 1
+            review = user_reviews[user_input]
+            # binding.pry
+
+            record_id = user_reviews[user_input].id
+            # selected_review = gets.chomp
+            # record_id = user_reviews[(selected_review).to_i - 1].id
+
+            Review.find_by(id: record_id).destroy
+            @user = User.find(@user.id)
+
+            puts "Your review for #{review.coffee_shop.name} has been deleted."
+            puts "Would you like to delete another review you made?(yes/no)"
+            update_another = gets.chomp.downcase
+
+            if update_another == "yes"
+                iteration = true
+            elsif update_another == "no"
+                iteration = false
+            end
+        end
     end 
 
-     def run 
-        user = nil
     def check_range_and_number(range, user_input)
         (0..range).to_a.include?(user_input)
     end
@@ -300,7 +327,7 @@ class CliInterface
                 self.edit_my_reviews
             when "delete a review"
                 iteration = true
-                self.delete_review(user)
+                self.delete_review
             when "log out"
                 iteration = false
                 system("clear")
