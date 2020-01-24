@@ -92,12 +92,12 @@ class CliInterface
             input = gets.strip
 
             system("clear")
-            puts "Thank you #{user.name} for buying #{self.sanitize_word(input)} from #{loc_name_input}."
-            puts "Hey #{user.name}, would you like to make a review? (Yes/No)"
+            puts "Thank you #{@user.name} for buying #{self.sanitize_word(input)} from #{loc_name_input}."
+            puts "Hey #{@user.name}, would you like to make a review? (Yes/No)"
             input = gets.strip.downcase
             
             if input == 'yes'
-                self.write_review(coffee_shop_obj ,loc_name_input, user)
+                self.write_review(coffee_shop_obj ,loc_name_input)
             elsif user_input == "no"
                 puts "No worries...enjoy your coffee!"
             end
