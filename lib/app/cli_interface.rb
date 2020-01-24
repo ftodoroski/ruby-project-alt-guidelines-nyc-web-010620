@@ -303,10 +303,6 @@ class CliInterface
         end
     end
 
-    def update_password
-        
-    end 
-
      def run 
         system("clear")
         self.greeting 
