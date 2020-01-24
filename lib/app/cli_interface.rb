@@ -198,24 +198,48 @@ class CliInterface
     def edit_my_reviews(user)
         user_reviews = Review.all.select { |review| review.user_id == user.id }
 
+        iteration = true
+        while iteration
+            iteration = false
 
-        puts "Which review would you like to update"
-        user_reviews.each_with_index do |review, index|
+            system("clear")
+            puts "Which review would you like to update"
+            user_reviews.each_with_index do |review, index|
+                puts "\n"
+                puts "#{index += 1}."
+                puts "Coffee Shop: #{review.coffee_shop.name}"
+                puts "Your Rating: #{review.rating}"
+                puts "Description: #{review.description}"
+            end
+
             puts "\n"
-            puts "#{index += 1}."
+            puts "Select a review to updated"
+            user_input = gets.chomp.to_i - 1
+            review = user_reviews[user_input]
+
+            system("clear")
             puts "Coffee Shop: #{review.coffee_shop.name}"
             puts "Your Rating: #{review.rating}"
             puts "Description: #{review.description}"
+            puts "\n"
+
+            puts "New rating of #{review.coffee_shop.name}."
+            new_rating = gets.chomp.to_i
+
+            puts "Update your description for #{review.coffee_shop.name}."
+            new_description = gets.chomp
+
+            puts "Would you like to update another review you made?(yes/no)"
+            update_another = gets.chomp.downcase
+
+            if update_another == "yes"
+                iteration = true
+            elsif update_another == "no"
+                iteration = false
+            end
+           
+            review.update(rating: new_rating, description: new_description)
         end
-
-        user_input = gets.chomp
-        review = user_reviews[user_input].id 
-
-        puts "New rating of #{review.coffee_shop.name}"
-        new_rating = gets.chomp.to_i
-
-        puts "New "
-        new_description = gets.chomp
     end
 
      def run 
